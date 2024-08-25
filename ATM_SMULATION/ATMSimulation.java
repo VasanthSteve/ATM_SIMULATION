@@ -20,6 +20,7 @@ class ATM {
     int PIN = 4353;
     List<Transaction> transactions = new ArrayList<>();
     long accountNumber = 987654321L;
+    float VALID_AMOUNT = 100.0F;
 
 
     public void menuList() {
@@ -50,7 +51,6 @@ class ATM {
             default:
                 System.out.println("Thank You");
                 System.exit(1);
-                break;
         }
     }
 
@@ -68,7 +68,17 @@ class ATM {
         if(pinNumberValidation()) {
             System.out.println("Please enter the amount to withdrawal");
             Scanner sc = new Scanner(System.in);
-            float enteredWithdrawalAmount = sc.nextFloat();
+            float enteredWithdrawalAmount;
+            boolean isValidAmount;
+            while (true) {
+                enteredWithdrawalAmount = sc.nextFloat();
+                isValidAmount = isValidAmount(enteredWithdrawalAmount);
+                if(!isValidAmount) {
+                    System.out.println("Please enter more than Rs.100");
+                } else {
+                    break;
+                }
+            }
             if (enteredWithdrawalAmount > balance) {
                 System.out.println("Insufficient Balance in your account");
             } else {
@@ -88,7 +98,17 @@ class ATM {
         if(pinNumberValidation()) {
             Scanner sc = new Scanner(System.in);
             System.out.println("Please enter the amount to deposit");
-            float enteredDepositAmount = sc.nextFloat();
+            float enteredDepositAmount;
+            boolean isValidAmount;
+            while (true) {
+                enteredDepositAmount = sc.nextFloat();
+                isValidAmount = isValidAmount(enteredDepositAmount);
+                if(!isValidAmount) {
+                    System.out.println("Please enter more than Rs.100");
+                } else {
+                    break;
+                }
+            }
             balance = balance + enteredDepositAmount;
             transactions.add(new Transaction(enteredDepositAmount, "DEPOSIT", accountNumber));
             System.out.println("Amount = " + enteredDepositAmount + " deposit successful");
@@ -116,7 +136,7 @@ class ATM {
         if(pinNumberValidation()) {
             if (!transactions.isEmpty()) {
                 for (Transaction transaction : transactions) {
-                    System.out.println("Account Number = " + transaction.accountNumber + " Type = " + transaction.type + " Amount = " + transaction.amount);
+                    System.out.println("Account Number = " + transaction.accountNumber + ", Type = " + transaction.type + ", Amount = " + transaction.amount);
                 }
             } else {
                 System.out.println("No transactions found for the account number " + accountNumber);
@@ -145,6 +165,10 @@ class ATM {
             }
             menuList();
         }
+    }
+
+    public boolean isValidAmount(float enteredAmount) {
+        return !(enteredAmount < VALID_AMOUNT);
     }
 
 }
