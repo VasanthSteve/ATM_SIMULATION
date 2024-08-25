@@ -49,6 +49,7 @@ class ATM {
                 transactionHistory();
             default:
                 System.out.println("Thank You");
+                System.exit(1);
                 break;
         }
     }
